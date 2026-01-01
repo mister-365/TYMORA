@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cyberpunk Dashboard</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="profile">
+                <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+               <img src="{{ url_for('static', filename='img/avatar.png') }}" alt="avatar">
+
+                <img src="{{ url_for('static', filename='img/avatar.png') }}" alt="avatar">
+                <p>Admin</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Messages</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <div class="chat-container">
+                <div id="messages" class="messages"></div>
+                <form id="chat-form">
+                    <input type="text" id="chat-input" placeholder="Type your message...">
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS for chat -->
+    <script>
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+    const messages = document.getElementById('messages');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        const msg = document.createElement('div');
+        msg.classList.add('message', 'self');
+        msg.innerHTML = `<p>${text}</p><span class="time">${new Date().getHours().toString().padStart(2,'0')}:${new Date().getMinutes().toString().padStart(2,'0')}</span>`;
+        messages.appendChild(msg);
+        input.value = '';
+        messages.scrollTop = messages.scrollHeight;
+    });
+
+    input.addEventListener('keydown', function(e) {
+        if(e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            form.dispatchEvent(new Event('submit'));
+        }
+    });
+    </script>
+</body>
+</html>

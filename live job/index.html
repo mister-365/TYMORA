@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PulseJobs — Modern Job Board</title>
+  <meta name="description" content="A modern, responsive job posting site with Paybill payment option (demo)." />
+
+  <style>
+    :root{
+      --bg: #0f1724;
+      --card: #0b1320;
+      --muted: #98a0b3;
+      --accent: #00c2a8;
+      --accent-2: #7b61ff;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --white: #f6f7fb;
+      --danger:#ff6b6b;
+      --max-width: 1100px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#081025 60%);
+      color:var(--white);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding:24px 20px;
+      display:flex;justify-content:center;
+      font-size:16px;
+    }
+
+    .wrap{max-width:var(--max-width);width:100%;}
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;border-radius:10px;font-weight:700;font-size:18px}
+    .brand h1{margin:0;font-size:20px}
+    .tag{color:var(--muted);font-size:13px}
+
+    nav{display:flex;gap:10px;align-items:center}
+    button.cta{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:0;padding:10px 14px;border-radius:10px;color:var(--card);font-weight:600;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;color:var(--white);cursor:pointer}
+
+    .hero{display:grid;grid-template-columns:1fr;gap:18px;align-items:center;margin-bottom:22px}
+    .hero-left{background:var(--card);padding:22px;border-radius:14px;box-shadow:0 6px 24px rgba(5,8,15,0.6)}
+    .search-row{display:flex;gap:10px;flex-wrap:wrap}
+    .search-row input, .search-row select{flex:1 1 180px;padding:12px;border-radius:10px;border:0;background:var(--glass);color:var(--white);outline:none}
+    .pill-stats{display:flex;gap:10px;margin-top:12px}
+    .pill{background:var(--glass-2);padding:8px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
+
+    .main{display:grid;grid-template-columns: 1fr 380px;gap:18px}
+    .jobs{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:12px}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .filter{background:var(--glass);padding:6px 8px;border-radius:8px;font-size:14px;color:var(--muted);cursor:pointer}
+
+    .job-card{display:flex;gap:12px;padding:14px;border-radius:10px;margin-bottom:10px;align-items:center;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.03)}
+    .job-card img{width:46px;height:46px;border-radius:10px;object-fit:cover}
+    .job-info{flex:1}
+    .job-info h3{margin:0;font-size:16px}
+    .job-info p{margin:6px 0 0;color:var(--muted);font-size:14px}
+    .job-meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+    .badge{padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);font-weight:600}
+
+    aside.panel{background:var(--card);padding:16px;border-radius:12px;height:100%;position:sticky;top:24px}
+    .panel h4{margin-top:0}
+    .post-btn{width:100%;display:block;margin-top:10px}
+
+    .modal{position:fixed;inset:0;display:none;place-items:center;background:linear-gradient(rgba(2,6,12,0.6),rgba(2,6,12,0.8));z-index:60;padding:20px}
+    .modal.open{display:grid}
+    .modal .sheet{width:100%;max-width:760px;background:linear-gradient(180deg,var(--card),#071226);padding:18px;border-radius:12px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    input, textarea, select{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--white)}
+    textarea{min-height:120px}
+
+    .modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+
+    .paybox{background:linear-gradient(90deg, rgba(0,194,168,0.06), rgba(123,97,255,0.03));border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:10px;margin-top:12px}
+    .pay-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .pay-instructions{font-size:14px;color:var(--muted)}
+
+    .empty{padding:40px;border-radius:10px;text-align:center;background:var(--glass)}
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+
+    @media (max-width:980px){.main{grid-template-columns:1fr}aside.panel{position:relative;top:auto}.hero{grid-template-columns:1fr}}
+    @media (max-width:520px){header{flex-direction:column;align-items:flex-start}.brand h1{font-size:18px}.grid-2{grid-template-columns:1fr}.search-row input{flex:1 1 100%}}
+
+    .muted{color:var(--muted)}
+    .small{font-size:13px}
+    a.inline{color:var(--accent)}
+
+    /* Focus styles */
+    input:focus, select:focus, textarea:focus, button:focus {outline: 2px solid rgba(0,194,168,0.18);outline-offset:2px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">PJ</div>
+        <div>
+          <h1>PulseJobs</h1>
+          <div class="tag">Find top talent • Post premium jobs • Paybill payments</div>
+        </div>
+      </div>
+
+      <nav>
+        <button class="ghost" id="browseBtn">Browse jobs</button>
+        <button class="cta" id="openPost">Post a job</button>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-left">
+        <h2 style="margin:0 0 8px">Discover the right talent — fast</h2>
+        <p class="muted" style="margin:0 0 12px">Search by role, location, type or company. Pay for featured listings using Paybill.</p>
+
+        <div class="search-row" role="search" aria-label="Job search">
+          <input id="q" placeholder="Search job title or keywords" aria-label="Search keywords" />
+          <select id="loc" aria-label="Location"><option value="">Anywhere</option><option>Kenya</option><option>Remote</option><option>Uganda</option></select>
+          <select id="type" aria-label="Type"><option value="">Any type</option><option>Full-time</option><option>Part-time</option><option>Contract</option></select>
+          <button class="cta" id="searchBtn">Search</button>
+        </div>
+
+        <div class="pill-stats" aria-hidden="true">
+          <div class="pill">1.2k active jobs</div>
+          <div class="pill">327 companies</div>
+          <div class="pill">Featured listings available</div>
+        </div>
+      </div>
+    </section>
+
+    <main class="main">
+      <section class="jobs" aria-live="polite">
+        <div class="filters" id="filterRow">
+          <div class="filter" data-filter="Remote">Remote</div>
+          <div class="filter" data-filter="Engineering">Engineering</div>
+          <div class="filter" data-filter="Design">Design</div>
+          <div class="filter" data-filter="Marketing">Marketing</div>
+        </div>
+
+        <div id="jobsList">
+          <!-- Jobs injected by JavaScript -->
+        </div>
+
+        <div class="empty" id="noResults" style="display:none">
+          <h3>No matching jobs</h3>
+          <p class="muted">Try adjusting your search terms or <a class="inline" href="#" id="clearSearch">clear filters</a>.</p>
+        </div>
+      </section>
+
+      <aside class="panel" aria-label="Sidebar">
+        <h4>Post a job</h4>
+        <p class="muted">Create a free listing or pay to feature your job so it appears at the top for 7 days.</p>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="cta post-btn" id="openPost2">Create listing</button>
+        </div>
+
+        <div class="paybox" role="region" aria-label="Paybill feature">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:700">Paybill (Feature)</div>
+              <div class="small muted">M-Pesa Paybill instructions </div>
+            </div>
+            <div class="badge">KES 1,200</div>
+          </div>
+
+          <div style="margin-top:10px" class="pay-instructions">
+            <strong>Paybill:</strong> <span id="paybill-number">123456</span><br/>
+            <strong>Account:</strong> Use your CompanyName or JobID
+            <div style="margin-top:8px;font-size:13px" class="muted">After payment, enter the M-Pesa transaction code below to verify and publish your featured listing automatically .</div>
+          </div>
+
+          <div style="margin-top:10px">
+            <input id="mpesaCode" placeholder="Enter M-Pesa transaction code (e.g. AB12CD345)" aria-label="M-Pesa transaction code" />
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="cta" id="verifyPay">Verify Payment</button>
+              <button class="ghost" id="clearPay">Clear</button>
+            </div>
+            <div id="payResult" class="muted small" style="margin-top:8px"></div>
+          </div>
+        </div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)"/>
+        <div class="muted small">Need server-side integration? Backend verification with Safaricom M-Pesa APIs (Lipa na M-Pesa) is recommended for production.</div>
+      </aside>
+    </main>
+
+    <footer>
+      © <span id="year"></span> PulseJobs — Crafted for modern hiring teams. • Built responsive & ready
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="postTitle">
+      <h3 id="postTitle">Create a job listing</h3>
+      <form id="postForm">
+        <div class="grid-2">
+          <div>
+            <label class="small muted">Job title</label>
+            <input name="title" required placeholder="Senior Frontend Engineer" />
+          </div>
+          <div>
+            <label class="small muted">Company</label>
+            <input name="company" required placeholder="Neon Labs" />
+          </div>
+        </div>
+
+        <div style="margin-top:10px" class="grid-2">
+          <div>
+            <label class="small muted">Location</label>
+            <input name="location" placeholder="Nairobi / Remote" />
+          </div>
+          <div>
+            <label class="small muted">Type</label>
+            <select name="type"><option>Full-time</option><option>Part-time</option><option>Contract</option><option>Internship</option></select>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label class="small muted">Short description</label>
+          <textarea name="desc" placeholder="Brief about the role..." required></textarea>
+        </div>
+
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center;justify-content:space-between">
+          <div class="muted small">Feature this job for <strong>KES 1,200</strong> to appear on top for 7 days</div>
+          <div>
+            <label class="small muted">Feature?</label>
+            <select name="featured"><option value="0">No</option><option value="1">Yes — Paybill</option></select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="ghost" id="cancel">Cancel</button>
+          <button class="cta" type="submit">Publish listing</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Configuration (change for your deployment)
+    const CONFIG = {
+      PAYBILL_NUMBER: '123456',
+      FEATURE_PRICE_KES: 1200
+    };
+
+    // In-memory job store (demo). Replace with server API calls for production.
+    const jobs = [
+      {id:1,title:'Senior Frontend Engineer',company:'Neon Labs',loc:'Nairobi',type:'Full-time',featured:true},
+      {id:2,title:'Product Designer',company:'Atlas',loc:'Remote',type:'Contract',featured:false},
+      {id:3,title:'Backend Engineer',company:'PulseTech',loc:'Nairobi',type:'Full-time',featured:false},
+      {id:4,title:'Growth Marketer',company:'Hive',loc:'Mombasa',type:'Part-time',featured:false}
+    ];
+
+    // Utils
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"]+/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    }
+
+    function makeLogoSVG(letter){
+      const L = escapeHtml((letter||'C').charAt(0).toUpperCase());
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='46' height='46'><rect rx='8' width='100%' height='100%' fill='%2300c2a8'/><text x='50%' y='58%' font-size='18' font-family='sans-serif' text-anchor='middle' fill='white'>${L}</text></svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    // DOM elements
+    const jobsList = document.getElementById('jobsList');
+    const noResults = document.getElementById('noResults');
+    const paybillNumberEl = document.getElementById('paybill-number');
+    const payResult = document.getElementById('payResult');
+
+    paybillNumberEl.textContent = CONFIG.PAYBILL_NUMBER;
+
+    function renderJobs(list){
+      jobsList.innerHTML = '';
+      if(!Array.isArray(list) || list.length === 0){
+        noResults.style.display='block';
+        return;
+      }
+      noResults.style.display='none';
+      list.forEach(j => {
+        const card = document.createElement('article');
+        card.className='job-card';
+        const logo = makeLogoSVG(j.company || j.title);
+        card.innerHTML = `
+          <img src="${logo}" alt="${escapeHtml(j.company || j.title)} logo"/>
+          <div class="job-info">
+            <h3>${escapeHtml(j.title)}</h3>
+            <p class="muted">${escapeHtml(j.company)} • ${escapeHtml(j.loc || 'Remote')} • ${escapeHtml(j.type)}</p>
+          </div>
+          <div class="job-meta">
+            <div class="badge">${j.featured? 'Featured' : 'Open'}</div>
+            <div class="small muted">#${j.id}</div>
+          </div>
+        `;
+        jobsList.appendChild(card);
+      });
+    }
+
+    renderJobs(jobs);
+
+    // Search
+    document.getElementById('searchBtn').addEventListener('click', ()=>{
+      const q = (document.getElementById('q').value || '').toLowerCase().trim();
+      const loc = (document.getElementById('loc').value || '').toLowerCase();
+      const type = (document.getElementById('type').value || '').toLowerCase();
+      const results = jobs.filter(j => {
+        const matchesQ = !q || j.title.toLowerCase().includes(q) || (j.company && j.company.toLowerCase().includes(q));
+        const matchesLoc = !loc || (j.loc && j.loc.toLowerCase().includes(loc));
+        const matchesType = !type || (j.type && j.type.toLowerCase().includes(type));
+        return matchesQ && matchesLoc && matchesType;
+      });
+      renderJobs(results);
+    });
+
+    document.getElementById('clearSearch').addEventListener('click',(e)=>{e.preventDefault();document.getElementById('q').value='';document.getElementById('loc').value='';document.getElementById('type').value='';renderJobs(jobs)});
+
+    // Filters clickable
+    document.querySelectorAll('.filter').forEach(btn => {
+      btn.addEventListener('click', ()=>{
+        const term = btn.dataset.filter;
+        const results = jobs.filter(j => (j.loc && j.loc.toLowerCase().includes(term.toLowerCase())) || (j.type && j.type.toLowerCase().includes(term.toLowerCase())) || (j.company && j.company.toLowerCase().includes(term.toLowerCase())) || (j.title && j.title.toLowerCase().includes(term.toLowerCase())));
+        renderJobs(results);
+      });
+    });
+
+    // Modal
+    const modal = document.getElementById('modal');
+    function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeModal(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    document.getElementById('openPost').addEventListener('click', openModal);
+    document.getElementById('openPost2').addEventListener('click', openModal);
+    document.getElementById('cancel').addEventListener('click', closeModal);
+
+    // Posting logic (client-side demo)
+    document.getElementById('postForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const title = fd.get('title') || '';
+      const company = fd.get('company') || '';
+      const loc = fd.get('location') || 'Remote';
+      const type = fd.get('type') || 'Full-time';
+      const desc = fd.get('desc') || '';
+      const featured = fd.get('featured') === '1';
+
+      if(!title.trim() || !company.trim() || !desc.trim()){
+        alert('Please complete the required fields.');
+        return;
+      }
+
+      const newJob = { id: Date.now(), title: title.trim(), company: company.trim(), loc: loc.trim(), type: type.trim(), desc: desc.trim(), featured };
+      jobs.unshift(newJob);
+      renderJobs(jobs);
+      closeModal();
+
+      if(featured){
+        showMessage(`Job published as draft. To feature it, complete the Paybill payment (KES ${CONFIG.FEATURE_PRICE_KES}) and verify the M-Pesa transaction code.`);
+      } else {
+        showMessage('Job published successfully (demo).');
+      }
+      e.target.reset();
+    });
+
+    // Payment verification (demo)
+    document.getElementById('verifyPay').addEventListener('click', ()=>{
+      const code = (document.getElementById('mpesaCode').value || '').trim();
+      if(!code){payResult.textContent = 'Please enter the transaction code.';return}
+      const ok = /^[A-Z0-9]{6,12}$/i.test(code);
+      if(ok){
+        payResult.textContent = 'Payment verified (demo). Your featured listing will go live once backend confirms.';
+        payResult.style.color = '';
+      } else {
+        payResult.textContent = 'Unable to verify code in demo. Use a valid M-Pesa transaction code (alphanumeric).';
+        payResult.style.color = 'var(--danger)';
+      }
+    });
+
+    document.getElementById('clearPay').addEventListener('click', ()=>{document.getElementById('mpesaCode').value=''; payResult.textContent='';});
+
+    // tiny UX
+    function showMessage(msg){
+      // unobtrusive message using native toast (simple)
+      try{if('Notification' in window){console.log(msg);} }catch(e){}
+      alert(msg);
+    }
+
+    // keyboard accessibility: close modal on Escape
+    document.addEventListener('keydown', e => { if(e.key === 'Escape'){ if(modal.classList.contains('open')) closeModal(); } });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Expose for debug
+    window._PulseJobs = { jobs, renderJobs };
+  </script>
+</body>
+</html>
+[]
